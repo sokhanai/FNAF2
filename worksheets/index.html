@@ -106,24 +106,24 @@
             }
         };
 
-        // Define game data
-        var games = [
-            "Game 1",
-            "Game 2",
-            "Game 3",
-            // Add more games as needed
-        ];
+        // Define game data with redirection URLs
+        var games = {
+            "Five Nights at Freddy's 2": "/worksheets/fnaf2",
+            "Game 2": "game2.html",
+            "Game 3": "game3.html"
+            // Add more games and redirection URLs as needed
+        };
 
         // Sort games alphabetically
-        games.sort();
+        var sortedGames = Object.keys(games).sort();
 
         // Populate game list
         var gameList = document.getElementById("game-list");
-        games.forEach(function(game) {
+        sortedGames.forEach(function(game) {
             var button = document.createElement("button");
             button.textContent = game;
             button.className = "button";
-            button.setAttribute("onclick", "playGame('" + game + "')");
+            button.setAttribute("onclick", "playGame('" + games[game] + "')");
             gameList.appendChild(button);
         });
 
@@ -140,9 +140,9 @@
             });
         }
 
-        function playGame(game) {
-            console.log("Redirecting to " + game);
-            // Add your redirection logic here
+        function playGame(url) {
+            console.log("Redirecting to " + url);
+            window.location.href = url; // Redirect to the specified URL
         }
     </script>
 </body>

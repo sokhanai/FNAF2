@@ -29,7 +29,7 @@
             padding: 20px;
             border-radius: 10px;
             text-align: center;
-            max-width: 400px;
+            max-width: 600px; /* Increased max-width */
         }
         .button {
             display: block;
@@ -58,9 +58,35 @@
             background-color: #1a1a2e; /* Dark mode search bar */
             color: #fff;
         }
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #loading-spinner {
+            border: 6px solid #f3f3f3; /* Light gray border */
+            border-top: 6px solid #3498db; /* Blue border */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
+    <div id="loading">
+        <div id="loading-spinner"></div>
+    </div>
     <div id="top-bar">
         <h1>Synthex V2</h1>
     </div>
@@ -68,14 +94,39 @@
         <div id="middle-box">
             <input type="text" id="search-bar" placeholder="Search..." oninput="filterItems()">
             <div id="game-list">
-                <button class="button" onclick="playGame('game1')">Play Game 1</button>
-                <button class="button" onclick="playGame('game2')">Play Game 2</button>
-                <!-- Add more buttons as needed -->
+                <!-- Games will be dynamically added here -->
             </div>
         </div>
     </div>
 
     <script>
+        document.onreadystatechange = function () {
+            if (document.readyState === "complete") {
+                document.getElementById("loading").style.display = "none";
+            }
+        };
+
+        // Define game data
+        var games = [
+            "Game 1",
+            "Game 2",
+            "Game 3",
+            // Add more games as needed
+        ];
+
+        // Sort games alphabetically
+        games.sort();
+
+        // Populate game list
+        var gameList = document.getElementById("game-list");
+        games.forEach(function(game) {
+            var button = document.createElement("button");
+            button.textContent = game;
+            button.className = "button";
+            button.setAttribute("onclick", "playGame('" + game + "')");
+            gameList.appendChild(button);
+        });
+
         function filterItems() {
             var searchText = document.getElementById('search-bar').value.toLowerCase();
             var buttons = document.querySelectorAll('.button');

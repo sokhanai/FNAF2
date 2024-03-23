@@ -58,15 +58,6 @@
             background-color: #1a1a2e; /* Dark mode search bar */
             color: #fff;
         }
-        #dark-mode-toggle {
-            margin-top: 20px;
-            background-color: #6c63ff; /* Lighter purple */
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
@@ -75,30 +66,32 @@
     </div>
     <div id="container">
         <div id="middle-box">
-            <input type="text" id="search-bar" placeholder="Search...">
-            <button class="button" onclick="search()">Search</button>
-            <button class="button" onclick="playGame('game1')">Play Game 1</button>
-            <button class="button" onclick="playGame('game2')">Play Game 2</button>
-            <!-- Add more buttons as needed -->
-            <button id="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+            <input type="text" id="search-bar" placeholder="Search..." oninput="filterItems()">
+            <div id="game-list">
+                <button class="button" onclick="playGame('game1')">Play Game 1</button>
+                <button class="button" onclick="playGame('game2')">Play Game 2</button>
+                <!-- Add more buttons as needed -->
+            </div>
         </div>
     </div>
 
     <script>
-        function search() {
-            var searchText = document.getElementById('search-bar').value;
-            // Placeholder search logic, replace with actual search functionality
-            console.log("Searching for: " + searchText);
+        function filterItems() {
+            var searchText = document.getElementById('search-bar').value.toLowerCase();
+            var buttons = document.querySelectorAll('.button');
+            buttons.forEach(function(button) {
+                var buttonText = button.textContent.toLowerCase();
+                if (buttonText.includes(searchText)) {
+                    button.style.display = 'block';
+                } else {
+                    button.style.display = 'none';
+                }
+            });
         }
 
         function playGame(game) {
-            // Placeholder game redirection logic, replace with actual redirection
             console.log("Redirecting to " + game);
-        }
-
-        function toggleDarkMode() {
-            var body = document.body;
-            body.classList.toggle("dark-mode");
+            // Add your redirection logic here
         }
     </script>
 </body>

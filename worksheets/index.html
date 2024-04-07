@@ -11,12 +11,14 @@
             font-family: Arial, sans-serif;
             background-color: #1a1a2e; /* Dark blue background */
             color: #fff;
+            position: relative; /* Position relative for the panic button */
         }
         #top-bar {
             background-color: #4a47a3; /* Purple top bar */
             color: #fff;
             padding: 10px 20px;
             text-align: center;
+            position: relative; /* Position relative for the panic button */
         }
         #container {
             display: flex;
@@ -69,6 +71,7 @@
             display: none; /* Initially hidden */
             transition: opacity 0.5s ease; /* Transition for opacity */
             opacity: 0; /* Initially hidden */
+            z-index: 9999; /* Ensure loading screen appears on top */
         }
         #loading.show {
             display: flex;
@@ -88,6 +91,42 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Additional style for tabs */
+        .tab {
+            display: inline-block;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .tab:hover {
+            background-color: #6c63ff; /* Lighter purple on hover */
+        }
+
+        .active-tab {
+            background-color: #7b74ff; /* Lighter purple for active tab */
+            border-bottom: 2px solid #fff; /* White bottom border for active tab */
+        }
+
+        /* Additional style for the "PANIC" button */
+        .panic-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            background-color: #ff4444; /* Red button */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .panic-button:hover {
+            background-color: #ff6666; /* Lighter red on hover */
+        }
     </style>
 </head>
 <body>
@@ -95,13 +134,53 @@
         <div id="loading-spinner"></div>
     </div>
     <div id="top-bar">
-        <h1>Synthex V2</h1>
+        <!-- Tabs added here -->
+        <div class="tab active-tab" onclick="showTab('featured')">Featured</div>
+        <div class="tab" onclick="showTab('cloud')">Cloud</div>
+        <div class="tab" onclick="showTab('html5')">HTML5</div>
+        <div class="tab" onclick="showTab('about')">About</div>
+        <h1 style="display: inline-block; margin-left: 20px;">Synthex V3</h1>
+        <!-- "PANIC" button -->
+        <a href="https://deltamath.com/student" class="panic-button">PANIC</a>
     </div>
     <div id="container">
         <div id="middle-box">
-            <input type="text" id="search-bar" placeholder="Search..." oninput="filterItems()">
-            <div id="game-list">
-                <!-- Games will be dynamically added here -->
+            <div id="featured" class="tab-content">
+                <input type="text" id="search-bar" placeholder="Search..." oninput="filterItems()">
+                <div id="featured-list">
+                    <!-- Games will be dynamically added here -->
+                </div>
+                <footer>Copyright Synthex Technologies</footer>
+                <footer>All rights reserved.</footer>
+            </div>
+            <div id="cloud" class="tab-content" style="display: none;">
+                <input type="text" id="search-bar" placeholder="Search..." oninput="filterItems()">
+                <div id="cloud-list">
+                    <!-- Games will be dynamically added here -->
+                </div>
+            </div>
+            <div id="html5" class="tab-content" style="display: none;">
+                <h2>Coming Soon</h2>
+                <p>Due to the difficult process of migrating to this new system, this page will be coming soon.</p>
+            </div>
+            <div id="about" class="tab-content" style="display: none;">
+                <h2>About</h2>
+                <p>Welcome to Synthex Gaming. We are a free to use gaming platform meant to bring everyone some more fun.</p>
+                <p>Active users: <span id="active-users"></span></p> <!-- Placeholder for active users -->
+                <p></p>
+                <footer>Synthex Gaming is a project aimed towards letting people play games online. We do not condone piracy.
+
+                    All game versions present on the site are already out of production / are open source. Without a service like this, many of the titles available here would be not playable
+                    
+                    By playing ANY titles from this website you are agreeing to the following:
+                    
+                    You are responsible for checking your local laws regarding the use of this site. You are authorized to / own a license to play any game.
+                    These files are hosted for archival purposes on a best effort basis and we do not guarantee any level of quality as far as emulation is concerned.
+                    
+                    Removal Notices & DMCA Information
+                    If you own the copyrights to a title hosted on Astroid and would like to request removal please note that we process all correct and complete removal requests within 7 working days. We are DMCA-compliant and happy to work with you.
+                    
+                    To request removal of data, please send a removal request to [synthex@null.net]. In your request, please make sure you identify the work, the URL of the page where it appears, your contact information, and your electronic or physical signature. Please note that you must own or represent the copyrights pertaining to the request. You will receive a confirmation once your request has been processed.</footer>
             </div>
         </div>
     </div>
@@ -116,25 +195,39 @@
         };
 
         // Define game data with redirection URLs
-        var games = {
+        var featured = {
             "Five Nights at Freddy's 2": "/worksheets/fnaf2",
             "Game 2": "game2.html",
             "Game 3": "game3.html"
-            // Add more games and redirection URLs as needed
         };
+        var cloud = {
+            "Android": "/worksheets/android",
+            "Roblox": "/worksheets/roblox",
+            "FC 24": "/worksheets/fc"
+        }
 
         // Sort games alphabetically
-        var sortedGames = Object.keys(games).sort();
+        var sortedFeatured = Object.keys(featured).sort();
+        var sortedCloud = Object.keys(cloud).sort();
 
         // Populate game list
-        var gameList = document.getElementById("game-list");
-        sortedGames.forEach(function(game) {
+        var gameList = document.getElementById("featured-list");
+        sortedFeatured.forEach(function(game) {
             var button = document.createElement("button");
             button.textContent = game;
             button.className = "button";
-            button.setAttribute("onclick", "playGame('" + games[game] + "')");
+            button.setAttribute("onclick", "playGame('" + featured[game] + "')");
             gameList.appendChild(button);
         });
+        var cloudList = document.getElementById("cloud-list")
+        sortedCloud.forEach(function(game) {
+            var button = document.createElement("button");
+            button.textContent = game;
+            button.className = "button";
+            button.setAttribute("onclick", "playGame('" + cloud[game] + "')");
+            cloudList.appendChild(button);
+        });
+
 
         function filterItems() {
             var searchText = document.getElementById('search-bar').value.toLowerCase();
@@ -158,6 +251,65 @@
                 window.location.href = url; // Redirect to the specified URL
             }, 1000);
         }
+
+        // Function to show/hide tab content
+        function showTab(tabName) {
+            var tabs = document.querySelectorAll('.tab');
+            var tabContents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(function(tab) {
+                tab.classList.remove('active-tab');
+            });
+
+            tabContents.forEach(function(content) {
+                content.style.display = 'none';
+            });
+
+            document.querySelector('#' + tabName).style.display = 'block';
+            document.querySelector('.' + tabName).classList.add('active-tab');
+        }
+
+        // Function to generate random active users
+        function getRandomActiveUsers() {
+            // Get current time
+            var currentTime = new Date();
+            var hour = currentTime.getHours();
+
+            // Set default number of active users
+            var activeUsers = 0;
+
+            // Adjust the number of active users based on the time of day
+            if (hour >= 6 && hour < 12) {
+                // Morning: 20 - 40 active users
+                activeUsers = Math.floor(Math.random() * (40 - 20 + 1)) + 20;
+            } else if (hour >= 12 && hour < 18) {
+                // Afternoon: 10 - 20 active users
+                activeUsers = Math.floor(Math.random() * (20 - 10 + 1)) + 10;
+            } else if (hour >= 18 && hour < 22) {
+                // Evening: 5 - 10 active users
+                activeUsers = Math.floor(Math.random() * (10 - 5 + 1)) + 5;
+            } else {
+                // Night: 1 - 5 active users
+                activeUsers = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
+            }
+
+            return activeUsers;
+        }
+
+        // Update active users display
+        function updateActiveUsers() {
+            var activeUsersElement = document.getElementById('active-users');
+            if (activeUsersElement) {
+                var activeUsers = getRandomActiveUsers();
+                activeUsersElement.textContent = activeUsers;
+            }
+        }
+
+        // Call updateActiveUsers initially
+        updateActiveUsers();
+
+        // Call updateActiveUsers every 10 seconds
+        setInterval(updateActiveUsers, 10000); // Update every 10 seconds
     </script>
 </body>
 </html>

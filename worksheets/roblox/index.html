@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeltaMath Student</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background-color: #1f1f1f; /* Dark mode background color */
+    color: #fff; /* Text color */
+    font-family: Arial, sans-serif;
+  }
+
+  #launching-animation {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rocketLaunch 1.5s forwards, fadeOut 1.5s 13.5s forwards;
+    z-index: 9999;
+  }
+
+  @keyframes rocketLaunch {
+    0% {
+      transform: translate(-50%, 100%) scale(0);
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(100%, -100%);
+    }
+  }
+
+  #launching-text {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    text-align: center;
+    animation: fadeOut 1.5s 13.5s forwards;
+  }
+
+  #embed-website {
+    display: none;
+    height: 100%;
+    width: 100%;
+  }
+</style>
+</head>
+<body>
+
+<div id="launching-animation">
+  <img src="https://media.tenor.com/images/7e96d994f29b388f63f7aa77ff2bea78/tenor.gif" alt="Rocket Launch">
+</div>
+
+<div id="launching-text">
+  Launching with Cloud Gaming
+</div>
+
+<iframe id="embed-website" src="https://thewebsitesbridge.com/apps/roblox-corporation/5349/roblox.html" frameborder="0"></iframe>
+
+<script>
+  // Countdown timer
+  setTimeout(() => {
+    document.getElementById('launching-animation').style.animation = "rocketLeave 1.5s forwards";
+    setTimeout(() => {
+      document.getElementById('launching-animation').style.display = 'none';
+      document.getElementById('embed-website').style.display = 'block';
+    }, 1500);
+  }, 15000);
+
+  // Additional animation for rocket leaving
+  const rocketAnimation = document.createElement('style');
+  rocketAnimation.textContent = `
+    @keyframes rocketLeave {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+      100% {
+        transform: translate(100%, -100%) scale(0);
+      }
+    }
+  `;
+  document.head.appendChild(rocketAnimation);
+</script>
+
+</body>
+</html>
